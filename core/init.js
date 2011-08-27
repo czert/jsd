@@ -1,0 +1,5 @@
+jsd = function() {
+    return {
+        'core': {},
+    };
+}();
