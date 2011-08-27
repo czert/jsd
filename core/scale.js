@@ -7,11 +7,11 @@ jsd.core.Scale = Object.subClass({
     },
     
     to: function(value) {
-        console.log('not implemented at', this);
+        throw new Error('not implemented');
     },
 
     from: function(value) {
-        console.log('not implemented at', this);
+        throw new Error('not implemented');
     },
 
     getBounds: function() {
@@ -55,14 +55,13 @@ jsd.core.scale.Logarithmic = jsd.core.Scale.subClass({
     },
 
     _log: function(arg) {
+        if (arg <= 0) {
+            throw new Error('invalid log argument');
+        };
         return Math.log(arg) / Math.log(this.base);
     },
 
     to: function(value) {
-        if (value <= 0) {
-            console.log('invalid log argument at', this);
-            return undefined
-        };
         return (this._log(value) - this.llower) / (this.lupper - this.llower);
     },
 

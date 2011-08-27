@@ -2,6 +2,22 @@
 $(document).ready(function(){
 
     /*
+     * Basic
+     */
+
+    module('Basic');
+
+    test('setup', 5, function() {
+        this.scale = new jsd.core.Scale(-5, 5);
+        strictEqual(this.scale.getLower(), -5);
+        strictEqual(this.scale.getUpper(), 5);
+        deepEqual(this.scale.getBounds(), [-5, 5]);
+        raises(function() { this.scale.to(42); });
+        raises(function() { this.scale.from(42); });
+    });
+
+
+    /*
      * Linear
      */
 
@@ -46,6 +62,20 @@ $(document).ready(function(){
         this.scale = new jsd.core.scale.Logarithmic(0.01, 10, Math.E);
         deepEqual([this.scale.lower, this.scale.upper, this.scale.base], [0.01, 10, Math.E]);
         delete this.scale;
+    });
+
+    test('domain', 5, function() {
+        var scale = new jsd.core.scale.Logarithmic(0.01, 10);
+        raises(function() { scale.to(-1); });
+        raises(function() { scale.to(0); });
+        ok(scale.to(1));
+        raises(function() {
+            var scale2 = new jsd.core.scale.Logarithmic(0, 2);
+        }, 'lower bound == 0');
+        raises(function() {
+            var scale2 = new jsd.core.scale.Logarithmic(-1, 2);
+        }, 'lower bound < 0');
+        delete scale;
     });
 
 
