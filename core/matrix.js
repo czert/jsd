@@ -47,7 +47,11 @@ jsd.core.Matrix = Object.subClass({
     },
 
     copy: function() {
-        return new jsd.core.Matrix(this.serialize());
+        var result = new jsd.core.Matrix();
+        for (var i = 0; i < 3; i++)
+            for (var j = 0; j < 3; j++)
+                result.set(i, j, this.get(i, j));
+        return result;
     },
 
     invert: function() {
@@ -56,5 +60,31 @@ jsd.core.Matrix = Object.subClass({
             for (var i = 0; i < 3; i++)
                 inverted[j].push(this.get(i, j));
         this.entries = inverted;
+    },
+
+    getInvert: function() {
+        var new_ = this.copy();
+        new_.invert();
+        return new_;
+    },
+
+    multiply: function(by) {
+        // left multiplication
+        var result = [[0,0,0],[0,0,0],[0,0,0]];
+        for (var i = 0; i < 3; i++) {
+            for (var j = 0; j < 3; j++) {
+                var value = by.get(i, 0) * this.get(0, j)
+                          + by.get(i, 1) * this.get(1, j)
+                          + by.get(i, 2) * this.get(2, j);
+                result[i][j] = value;
+            };
+        };
+        this.entries = result;
+    },
+
+    getMultiply: function(by) {
+        var new_ = this.copy();
+        new_.multiply(by);
+        return new_;
     },
 });

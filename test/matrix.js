@@ -61,12 +61,26 @@ $(document).ready(function(){
         delete this.matrix;
     }});
 
-    test('invert', 2, function() {
+    test('invert, get~', 3, function() {
         var I = this.identity.copy();
         this.identity.invert();
         deepEqual(this.identity.serialize(), I.serialize());
 
         this.matrix.invert();
         deepEqual(this.matrix.serialize(), [1, 3, 2, 4, 0, 0]);
+
+        var m = this.matrix.getInvert();
+        deepEqual(m.serialize(), [1, 2, 3, 4, 5, 6]);
+    });
+
+    test('multiply, get~', 2, function() {
+        var M = this.matrix.copy();
+        M.multiply(this.identity);
+        deepEqual(M.serialize(), this.matrix.serialize());
+
+        var N = this.matrix.copy();
+        N.invert();
+        var X = N.getMultiply(M);
+        deepEqual(X.entries, [[35, 44, 5], [44, 56, 6], [5, 6, 1]]);
     });
 });
