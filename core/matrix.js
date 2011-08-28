@@ -18,6 +18,7 @@
  */
 
 jsd.core.Matrix = Object.subClass({
+
     init: function(list) {
         this.entries = [[1,0,0],[0,1,0],[0,0,1]];
         if (list !== undefined) {
@@ -30,6 +31,10 @@ jsd.core.Matrix = Object.subClass({
         };
     },
 
+    /*
+     * basic methods
+     */
+
     get: function(i, j) {
         return this.entries[i][j];
     },
@@ -38,10 +43,10 @@ jsd.core.Matrix = Object.subClass({
         this.entries[i][j] = value;
     },
 
-    serialize: function() {
+    serialize: function(whole) {
         var list = [];
         for (var j = 0; j < 3; j++)
-            for (var i = 0; i < 2; i++)
+            for (var i = 0; i < (whole ? 3 : 2); i++)
                 list.push(this.get(i, j));
         return list;
     },
@@ -54,6 +59,10 @@ jsd.core.Matrix = Object.subClass({
         return result;
     },
 
+    /*
+     * matrix operations
+     */
+
     invert: function() {
         var inverted = [[],[],[]];
         for (var j = 0; j < 3; j++)
@@ -63,6 +72,7 @@ jsd.core.Matrix = Object.subClass({
     },
 
     getInvert: function() {
+        // factory mode inversion
         var new_ = this.copy();
         new_.invert();
         return new_;
@@ -83,6 +93,7 @@ jsd.core.Matrix = Object.subClass({
     },
 
     getMultiply: function(by) {
+        // factory mode multiplication
         var new_ = this.copy();
         new_.multiply(by);
         return new_;

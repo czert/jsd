@@ -33,7 +33,7 @@ $(document).ready(function(){
         deepEqual(matrix.serialize(), [1, 0, 42, 1, 0, 24]);
     });
 
-    test('serialize', 2, function() {
+    test('serialize', 3, function() {
         var e1 = [1, 0, 0, 1, 0, 0];
         var m1 = new jsd.core.Matrix();
         deepEqual(m1.serialize(), e1);
@@ -41,12 +41,18 @@ $(document).ready(function(){
         var e2 = [1, 2, 3, 4, 5, 6];
         var m2 = new jsd.core.Matrix(e2);
         deepEqual(m2.serialize(), e2);
+
+        var e3 = [1, 2, 3, 4, 5, 6];
+        var e4 = [1, 2, 0, 3, 4, 0, 5, 6, 1];
+        var m3 = new jsd.core.Matrix(e3);
+        deepEqual(m3.serialize(true), e4);
     });
 
     test('copy', 1, function() {
         var matrix = new jsd.core.Matrix();
         matrix.set(0, 1, 42);
-        deepEqual(matrix.copy().serialize(), [1, 0, 42, 1, 0, 0]);
+        matrix.set(2, 1, 24);
+        deepEqual(matrix.copy().serialize(true), [1, 0, 0, 42, 1, 24, 0, 0, 1]);
     });
 
     /*
@@ -64,10 +70,10 @@ $(document).ready(function(){
     test('invert, get~', 3, function() {
         var I = this.identity.copy();
         this.identity.invert();
-        deepEqual(this.identity.serialize(), I.serialize());
+        deepEqual(this.identity.serialize(true), I.serialize(true));
 
         this.matrix.invert();
-        deepEqual(this.matrix.serialize(), [1, 3, 2, 4, 0, 0]);
+        deepEqual(this.matrix.serialize(true), [1, 3, 5, 2, 4, 6, 0, 0, 1]);
 
         var m = this.matrix.getInvert();
         deepEqual(m.serialize(), [1, 2, 3, 4, 5, 6]);
@@ -76,7 +82,7 @@ $(document).ready(function(){
     test('multiply, get~', 2, function() {
         var M = this.matrix.copy();
         M.multiply(this.identity);
-        deepEqual(M.serialize(), this.matrix.serialize());
+        deepEqual(M.serialize(true), this.matrix.serialize(true));
 
         var N = this.matrix.copy();
         N.invert();
