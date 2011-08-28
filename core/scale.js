@@ -15,7 +15,7 @@ jsd.core.Scale = Object.subClass({
     },
 
     getBounds: function() {
-        return [this.lower, this.upper];
+        return [this.getLower(), this.getUpper()];
     },
 
     getLower: function() {
@@ -24,6 +24,45 @@ jsd.core.Scale = Object.subClass({
 
     getUpper: function() {
         return this.upper;
+    },
+});
+
+
+jsd.core.scale.Discrete = jsd.core.Scale.subClass({
+    // TODO implement with binary search trees
+    init: function(ordering, values) {
+        this.ordering = ordering;
+        this.values = values;
+        this.sort();
+    },
+
+    sort: function() {
+    },
+    
+    getIndex: function(value) {
+        for (var i = 0; i < this.values.length; i++)
+            if (this.values[i] === value)
+                return i;
+    },
+
+    getSize: function() {
+        return this.values.length;
+    },
+
+    getLower: function() {
+        return this.values[0];
+    },
+
+    getUpper: function() {
+        return this.values[this.getSize()-1];
+    },
+
+    to: function(value) {
+        return this.getIndex(value) / this.getSize();
+    },
+
+    from: function(value) {
+        return this.values[value * Math.round(this.getSize())];
     },
 });
 
