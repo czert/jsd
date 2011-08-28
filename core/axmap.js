@@ -11,4 +11,8 @@ jsd.core.AxMap = Object.subClass({
     addRange: function(axis) {
         this.range.push(axis);
     },
+
+    getAll: function() {
+        return this.domain.concat(this.range);
+    }
 });

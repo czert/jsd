@@ -4,5 +4,11 @@ jsd.core.Axis = Object.subClass({
         this.scale = scale;
         this.map = map;
         this.originShift = shift;
+
+        // series that have this axis as a domain
+        this.dom_series = [];
+
+        // series that have this axis as a range
+        this.ran_series = [];
     },
 });
