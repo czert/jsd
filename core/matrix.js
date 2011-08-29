@@ -98,4 +98,20 @@ jsd.core.Matrix = Object.subClass({
         new_.multiply(by);
         return new_;
     },
+
+    /*
+     * vector operations
+     */
+
+    apply: function(vector) {
+        var result = [];
+        vector.push(1);
+        // multiply
+        for (var i = 0; i < 2; i++) {
+            result[i] = 0;
+            for (var j = 0; j < 3; j++)
+                result[i] += this.get(i, j) * vector[j];
+        };
+        return result;
+    },
 });

@@ -89,4 +89,18 @@ $(document).ready(function(){
         var X = N.getMultiply(M);
         deepEqual(X.entries, [[35, 44, 5], [44, 56, 6], [5, 6, 1]]);
     });
+
+    /*
+     * Vector Operations
+     */
+
+    module('Vector Operations');
+
+    test('apply', 2, function() {
+        var matrix = new jsd.core.Matrix([1, 0, 0, 1, 3, 5]);
+        var v1 = [1, 1];
+        var v2 = [7, 2];
+        deepEqual(matrix.apply(v1), [4, 6]);
+        deepEqual(matrix.apply(v2), [10, 7]);
+    });
 });
