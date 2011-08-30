@@ -2,7 +2,7 @@ var len = function(v) {
     return Math.sqrt(v[0] * v[0] + v[1] * v[1]);
 };
 
-var A = Object.subClass({
+var A = jsd.core.Observed.subClass({
     init: function(maps, values) {
         this.maps = maps;
         this.values = values;
@@ -20,17 +20,23 @@ var A = Object.subClass({
         c = canvas.circle(point[0], point[1], 3);
         c.attr('fill', '#a3c');
         c.attr('stroke', 'none');
-        var that = this;
+        var self = this;
         c.hover(function() {
-            that.g = new G(that.maps, that.values);
-            that.g.draw(o);
+            self.trigger('hover');
+            var g = new G(self.maps, self.values);
+            g.draw(o);
+            self.bind('unhover', g.die, g);
         }, function() {
-            that.g.die();
+            self.trigger('unhover');
         });
     },
 });
 
 var G = A.subClass({
+    init: function() {
+        this._super.apply(this, arguments);
+        this.__observed = [];
+    },
     draw: function(o) {
         var from = this.transform([this.values[0], 0]);
         var r = len(from);
@@ -39,7 +45,15 @@ var G = A.subClass({
         var to = o.apply(this.transform([0, this.values[1]]));
         this.p = canvas.path('M ' + from.join(',') + ' A ' + [r,r].join(',') + ' 0 ' + (this.values[1] > 0.5 ? '1' : '0') + ' 1 ' + point.join(',') + ' L ' + to.join(','));
     },
-    die: function() { this.p.remove() },
+    die: function() {
+        for (var event in this.__observed) {
+            for (var i in this.__observed[event]) {
+                var com = this.__observed[event][i];
+                com[0].unbind(event, com[1], this, com[2]);
+            };
+        };
+        this.p.remove();
+    },
 });
 
 

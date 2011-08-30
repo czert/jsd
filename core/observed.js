@@ -56,6 +56,7 @@ jsd.core.Observed = Object.subClass({
     },
 
     trigger: function(event) {
+        // console.log('trigger: ' + event, this);
         if (this.__listeners === undefined)
             return;
         var list = this.__listeners[event]; 
@@ -63,6 +64,7 @@ jsd.core.Observed = Object.subClass({
             var method = list[i][0];
             var context = list[i][1] || window;
             var args = list[i][2] || [];
+            // console.log('   apply', context, method, args);
             method.apply(context, args);
         };
     },
