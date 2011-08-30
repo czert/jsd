@@ -1,3 +1,6 @@
+// TODO
+//  __observed_purge() factory
+//  unbind all
 
 jsd.core.Observed = Object.subClass({
     bind: function(event, method, context, args) {
